@@ -9,42 +9,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4175e4bf-5178-4427-a5a7-1abf309d034c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem.sln" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/App.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Data/WeatherForecast.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Data/WeatherForecastService.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/FileSystem.csproj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Pages/Counter.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Pages/Error.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Pages/Error.cshtml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Pages/FetchData.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Pages/Index.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Pages/_Host.cshtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Program.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Properties/launchSettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Shared/MainLayout.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Shared/MainLayout.razor.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Shared/NavMenu.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Shared/NavMenu.razor.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Shared/SurveyPrompt.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/Startup.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/_Imports.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/appsettings.Development.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/appsettings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/bootstrap/bootstrap.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/bootstrap/bootstrap.min.css.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/FONT-LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/ICON-LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/font/css/open-iconic-bootstrap.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/font/fonts/open-iconic.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/font/fonts/open-iconic.otf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/font/fonts/open-iconic.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/font/fonts/open-iconic.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/open-iconic/font/fonts/open-iconic.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/css/site.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FileSystem/wwwroot/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FileSystem/Data/FileSystemService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FileSystem/Models/Disk.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FileSystem/Models/File.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FileSystem/Models/Folder.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FileSystem/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FileSystem/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.FileSystem/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.FileSystem/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FileSystem/Data/WeatherForecast.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FileSystem/Data/WeatherForecastService.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FileSystem/FileSystem.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/FileSystem/FileSystem.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FileSystem/Pages/FetchData.razor" beforeDir="false" afterPath="$PROJECT_DIR$/FileSystem/Pages/FetchData.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FileSystem/Startup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FileSystem/Startup.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +28,19 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/FileSystem/Models/File.cs" />
+        <option value="$PROJECT_DIR$/FileSystem/Models/Folder.cs" />
+        <option value="$PROJECT_DIR$/FileSystem/Data/WeatherForecastService.cs" />
+        <option value="$PROJECT_DIR$/FileSystem/Startup.cs" />
+        <option value="$PROJECT_DIR$/FileSystem/Data/FileSystemService.cs" />
+        <option value="$PROJECT_DIR$/FileSystem/Models/Disk.cs" />
+        <option value="$PROJECT_DIR$/FileSystem/Pages/FetchData.razor" />
+      </list>
+    </option>
   </component>
   <component name="ProjectId" id="1l7VDxBW9GxHrWB554JxWecboD7" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -108,7 +96,8 @@
       <updated>1606948000604</updated>
       <workItem from="1606948028289" duration="595000" />
       <workItem from="1606999920265" duration="97000" />
-      <workItem from="1607000038398" duration="306000" />
+      <workItem from="1607000038398" duration="632000" />
+      <workItem from="1607000728156" duration="2488000" />
     </task>
     <servers />
   </component>
@@ -137,5 +126,25 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="713" y="345" key="#Notifications/0.0.1920.1050/-2560.0.2560.1050@0.0.1920.1050" timestamp="1606999929252" />
+    <state width="929" height="278" key="GridCell.Tab.0.bottom" timestamp="1607003104051">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="929" height="278" key="GridCell.Tab.0.bottom/0.0.1920.1050/-2560.0.2560.1050@0.0.1920.1050" timestamp="1607003104051" />
+    <state width="929" height="278" key="GridCell.Tab.0.center" timestamp="1607003104051">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="929" height="278" key="GridCell.Tab.0.center/0.0.1920.1050/-2560.0.2560.1050@0.0.1920.1050" timestamp="1607003104051" />
+    <state width="929" height="278" key="GridCell.Tab.0.left" timestamp="1607003104051">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="929" height="278" key="GridCell.Tab.0.left/0.0.1920.1050/-2560.0.2560.1050@0.0.1920.1050" timestamp="1607003104051" />
+    <state width="929" height="278" key="GridCell.Tab.0.right" timestamp="1607003104051">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state width="929" height="278" key="GridCell.Tab.0.right/0.0.1920.1050/-2560.0.2560.1050@0.0.1920.1050" timestamp="1607003104051" />
+    <state x="552" y="257" key="Rider.ProjectTemplateDialog.Size" timestamp="1607000500090">
+      <screen x="0" y="0" width="1920" height="1050" />
+    </state>
+    <state x="552" y="257" key="Rider.ProjectTemplateDialog.Size/0.0.1920.1050/-2560.0.2560.1050@0.0.1920.1050" timestamp="1607000500090" />
   </component>
 </project>
