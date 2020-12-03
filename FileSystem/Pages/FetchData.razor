@@ -1,13 +1,16 @@
-﻿@page "/fetchdata"
+﻿@page "/fs"
 
 @using FileSystem.Data
 @using FileSystem.Models
+@using MongoDB.Bson
 @using MongoDB.Driver
 @inject FileSystemService FileSystemService
+@inject NavigationManager NavigationManager
 
-<h1>Weather forecast</h1>
+<h1>File system</h1>
 
-<p>This component demonstrates fetching data from a service.</p>
+<p>@Location</p>
+
 
 @if (disks == null)
 {
@@ -30,7 +33,7 @@ else
         @foreach (var disk in disks)
         {
             <tr>
-                <td>@disk.Name</td>
+                <td @onclick="@(e => MethodToTriggerUrl(disk.Name.ToString()))">@disk.Name</td>
                 <td>@disk.TotalSize</td>
                 <td>@disk.Created</td>
                 <td>@disk.LastEdit</td>
@@ -38,23 +41,60 @@ else
         }
         </tbody>
     </table>
-    <input type="text" @bind="newDisk.Name"/>
-    <button @onclick="Insert">Add disk!!!</button>
+    <select @bind=NewInsertType>
+        <option value="folder">Folder</option>
+        <option value="file">File</option>
+        <option value="disk">Disk</option>
+    </select>
+    @switch (NewInsertType)
+    {
+        case "folder":
+            
+            break;
+        case "file":
+            <input type="text" @bind="newFile.Name"/>
+            <button @onclick="InsertFile">Add @NewInsertType</button>
+            break;
+        case "disk":
+            <input type="text" @bind="newDisk.Name"/>
+            <button @onclick="InsertDisk">Add @NewInsertType</button>
+            break;
+    }
+
+
 }
 
 @code {
+    [Parameter]
+    public string Location { get; set; }
+
+    private string NewInsertType = "folder";
+        
     private List<Disk> disks;
     private List<File> files;
     private List<Folder> folders;
-    private Disk newDisk = new Disk(){Created = DateTime.Now, LastEdit = DateTime.Now,TotalSize = 0};
+    private Disk newDisk = new Disk(){Created = DateTime.Now, LastEdit = DateTime.Now,TotalSize = 0, Files =  {}, Folders = {}};
+    private File newFile = new File(){Created = DateTime.Now, LastEdit = DateTime.Now, Id = new ObjectId("5fc908ed697769e106a6fee0")};
+    private Folder newFolder = new Folder(){Created = DateTime.Now, LastEdit = DateTime.Now,TotalSize = 0};
 
     protected override async Task OnInitializedAsync()
     {
         disks = await FileSystemService.GetDisksAsync();
     }
 
-    public void Insert()
+    public async void InsertDisk()
     {
-        FileSystemService.Insert(newDisk);
+        FileSystemService.InsertDisk(newDisk);
+        disks = await FileSystemService.GetDisksAsync();
     }
+    public async void InsertFile()
+    {
+        FileSystemService.InsertFile(newFile);
+        disks = await FileSystemService.GetDisksAsync();
+    }
+    void MethodToTriggerUrl(string disk)
+    {
+        NavigationManager.NavigateTo($"fs/{disk}");
+    }
+
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FileSystem.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FileSystem.Data
@@ -16,10 +17,15 @@ namespace FileSystem.Data
             _client = new MongoClient();
             db = _client.GetDatabase("FileSystem");
         }
-        public void Insert(Disk disk)
+        public void InsertDisk(Disk disk)
         {
             var collection = db.GetCollection<Disk>("disk");
             collection.InsertOne(disk);
+        }
+        public void InsertFile(File file)
+        {
+            var collection = db.GetCollection<File>("file");
+            collection.InsertOne(file);
         }
         public Task<List<Disk>> GetDisksAsync()
         {
@@ -34,6 +40,13 @@ namespace FileSystem.Data
             //     TemperatureC = rng.Next(-20, 55),
             //     Summary = Summaries[rng.Next(Summaries.Length)]
             // }).ToArray());
+        }
+        public Task<List<File>> GetFilesAsync(ObjectId diskId)
+        {
+            var disks = db.GetCollection<Disk>("disk");
+            var disk = disks.Find(t => t.Id == diskId).First();
+            var files = db.GetCollection<File>("file").Find(t => disk.Files.Contains(t.Id));
+            return Task.FromResult(files.ToList());
         }
     }
 }

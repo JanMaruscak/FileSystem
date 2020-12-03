@@ -1,0 +1,47 @@
+﻿@page "/fs/{Location?}"
+
+@using FileSystem.Models
+@using FileSystem.Data
+@using MongoDB.Bson
+@inject FileSystemService FileSystemService
+
+<h3>Disk</h3>
+@if (files == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Created</th>
+            <th>Last Edit</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var disk in files)
+        {
+            <tr>
+                <td>@disk.Name</td>
+                <td>@disk.Created</td>
+                <td>@disk.LastEdit</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+@code {
+    [Parameter]
+    public string Location { get; set; }
+    
+    private List<File> files = new List<File>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        files = await FileSystemService.GetFilesAsync(new ObjectId("5fc908ed697769e106a6fee0"));
+    }
+
+}}

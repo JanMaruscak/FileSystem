@@ -31,6 +31,7 @@
         <e p="Pages" t="Include">
           <e p="_Host.cshtml" t="Include" />
           <e p="Counter.razor" t="Include" />
+          <e p="DiskView.razor" t="Include" />
           <e p="Error.cshtml" t="Include" />
           <e p="Error.cshtml.cs" t="Include" />
           <e p="FetchData.razor" t="Include" />
