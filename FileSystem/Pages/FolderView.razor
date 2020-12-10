@@ -1,4 +1,4 @@
-﻿@page "/fs/{Location?}"
+﻿@page "/fs/{Disk?}/{Location?}"
 
 @using FileSystem.Models
 @using FileSystem.Data
@@ -6,7 +6,7 @@
 @inject NavigationManager NavigationManager
 @inject FileSystemService FileSystemService
 
-<h3>@Location://</h3>
+<h3>Disk://@Location</h3>
 @if (_files == null)
 {
     <p>
@@ -18,7 +18,6 @@ else
     <table class="table">
         <thead>
         <tr>
-            <th>Type</th>
             <th>Name</th>
             <th>Created</th>
             <th>Last Edit</th>
@@ -35,14 +34,14 @@ else
             </tr>
         }
         @foreach (var folder in _folders)
-                {
-                    <tr>
-                        <td @onclick="@(e => MethodToTriggerUrl(folder.Name))">Folder</td>
-                        <td>@folder.Name</td>
-                        <td>@folder.Created</td>
-                        <td>@folder.LastEdit</td>
-                    </tr>
-                }
+        {
+            <tr>
+                <td @onclick="@(e => MethodToTriggerUrl(folder.Name))">Folder</td>
+                <td>@folder.Name</td>
+                <td>@folder.Created</td>
+                <td>@folder.LastEdit</td>
+            </tr>
+        }
         </tbody>
     </table>
     
@@ -65,8 +64,11 @@ else
 @code {
     [Parameter]
     public string Location { get; set; }
+[Parameter]
+    public string Disk { get; set; }
 
-    private Disk _current; 
+    private Folder _current;
+
     private string _newInsertType = "file";
     private string _newFileName;
     private string _newFolderName;
@@ -76,12 +78,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _current = FileSystemService.GetDiskByLocation(Location);
-        _files = await FileSystemService.GetFilesAsync(_current.Id, FileSystemService.ParentType.Disk);
-        _folders = await FileSystemService.GetFoldersAsync(_current.Id,FileSystemService.ParentType.Disk);
-    }
+        _current = FileSystemService.GetFolderByLocation(Location);
+        _files = await FileSystemService.GetFilesAsync(_current.Id, FileSystemService.ParentType.Folder);
+        _folders = await FileSystemService.GetFoldersAsync(_current.Id, FileSystemService.ParentType.Folder);
 
-    private async void InsertFile()
+    // _files = await FileSystemService.GetFilesAsync(FileSystemService.GetDisksAsync().Result.First(t => t.Name == Location).Id);
+    }
+    public async void InsertFile()
     {
         var newFile = new File
         {
@@ -90,14 +93,13 @@ else
             Id =  ObjectId.GenerateNewId(),
             LastEdit = DateTime.Now,
             Name = _newFileName,
-            Parent = FileSystemService.GetDiskByLocation(Location).Id
+            Parent = FileSystemService.GetFolderByLocation(Location).Id
         };
         await FileSystemService.InsertFileAsync(newFile);
         _files.Add(newFile);
         StateHasChanged();
     }
-
-    private async void InsertFolder()
+    public async void InsertFolder()
     {
         var newFolder = new Folder
         {
@@ -105,7 +107,7 @@ else
             Id =  ObjectId.GenerateNewId(),
             LastEdit = DateTime.Now,
             Name = _newFolderName,
-            Parent = FileSystemService.GetDiskByLocation(Location).Id,
+            Parent = FileSystemService.GetFolderByLocation(Location).Id,
             Files = new List<ObjectId>(),
             Subfolders = new List<ObjectId>(),
             TotalSize = 0
@@ -116,7 +118,7 @@ else
     }
     void MethodToTriggerUrl(string folder)
     {
-        NavigationManager.NavigateTo($"fs/{_current.Name}/{folder}");
+        NavigationManager.NavigateTo($"fs/{Disk}/{Location}/{folder}");
     }
 
 }}

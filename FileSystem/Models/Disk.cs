@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 
 namespace FileSystem.Models
@@ -10,7 +11,7 @@ namespace FileSystem.Models
         public ulong TotalSize { get; set; }
         public DateTime Created;
         public DateTime LastEdit;
-        public ObjectId[] Folders;
-        public ObjectId[] Files;
+        public List<ObjectId> Folders;
+        public List<ObjectId> Files;
     }
 }

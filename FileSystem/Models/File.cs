@@ -8,6 +8,7 @@ namespace FileSystem.Models
         public string Name { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastEdit { get; set; }
+        public ObjectId Parent { get; set; }
         public string Content { get; set; }
     }
 }

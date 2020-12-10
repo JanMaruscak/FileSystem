@@ -7,12 +7,12 @@
 @inject FileSystemService FileSystemService
 @inject NavigationManager NavigationManager
 
-<h1>File system</h1>
+<h1>Disks</h1>
 
 <p>@Location</p>
 
 
-@if (disks == null)
+@if (_disks == null)
 {
     <p>
         <em>Loading...</em>
@@ -30,7 +30,7 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var disk in disks)
+        @foreach (var disk in _disks)
         {
             <tr>
                 <td @onclick="@(e => MethodToTriggerUrl(disk.Name.ToString()))">@disk.Name</td>
@@ -41,25 +41,8 @@ else
         }
         </tbody>
     </table>
-    <select @bind=NewInsertType>
-        <option value="folder">Folder</option>
-        <option value="file">File</option>
-        <option value="disk">Disk</option>
-    </select>
-    @switch (NewInsertType)
-    {
-        case "folder":
-            
-            break;
-        case "file":
-            <input type="text" @bind="newFile.Name"/>
-            <button @onclick="InsertFile">Add @NewInsertType</button>
-            break;
-        case "disk":
-            <input type="text" @bind="newDisk.Name"/>
-            <button @onclick="InsertDisk">Add @NewInsertType</button>
-            break;
-    }
+    <input type="text" @bind="_newDiskName"/>
+    <button @onclick="InsertDisk">Add disk "@_newDiskName"</button>
 
 
 }
@@ -67,30 +50,30 @@ else
 @code {
     [Parameter]
     public string Location { get; set; }
-
-    private string NewInsertType = "folder";
+    private string _newDiskId;
+    private string _newDiskName;
         
-    private List<Disk> disks;
-    private List<File> files;
-    private List<Folder> folders;
-    private Disk newDisk = new Disk(){Created = DateTime.Now, LastEdit = DateTime.Now,TotalSize = 0, Files =  {}, Folders = {}};
-    private File newFile = new File(){Created = DateTime.Now, LastEdit = DateTime.Now, Id = new ObjectId("5fc908ed697769e106a6fee0")};
-    private Folder newFolder = new Folder(){Created = DateTime.Now, LastEdit = DateTime.Now,TotalSize = 0};
+    private List<Disk> _disks;
 
     protected override async Task OnInitializedAsync()
     {
-        disks = await FileSystemService.GetDisksAsync();
+        _disks = await FileSystemService.GetDisksAsync();
     }
 
     public async void InsertDisk()
     {
-        FileSystemService.InsertDisk(newDisk);
-        disks = await FileSystemService.GetDisksAsync();
-    }
-    public async void InsertFile()
-    {
-        FileSystemService.InsertFile(newFile);
-        disks = await FileSystemService.GetDisksAsync();
+        var newDisk = new Disk()
+        {
+            Created = DateTime.Now,
+            Files = new List<ObjectId>(),
+            Folders = new List<ObjectId>(),
+            Id = ObjectId.GenerateNewId(),
+            LastEdit = DateTime.Now,
+            Name = _newDiskName,
+            TotalSize = 0
+        };
+        await FileSystemService.InsertDiskAsync(newDisk);
+        _disks = await FileSystemService.GetDisksAsync();
     }
     void MethodToTriggerUrl(string disk)
     {
