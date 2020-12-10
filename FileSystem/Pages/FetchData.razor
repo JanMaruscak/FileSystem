@@ -33,16 +33,17 @@ else
         @foreach (var disk in _disks)
         {
             <tr>
-                <td @onclick="@(e => MethodToTriggerUrl(disk.Name.ToString()))">@disk.Name</td>
+                <td @onclick="@(e => ViewDisk(disk.Id.ToString()))">@disk.Name</td>
                 <td>@disk.TotalSize</td>
                 <td>@disk.Created</td>
                 <td>@disk.LastEdit</td>
+                <td @onclick="@(e => DeleteDisk(disk.Id))">Delete</td>
             </tr>
         }
         </tbody>
     </table>
     <input type="text" @bind="_newDiskName"/>
-    <button @onclick="InsertDisk">Add disk "@_newDiskName"</button>
+    <button @onclick="InsertDisk">Add disk</button>
 
 
 }
@@ -60,7 +61,12 @@ else
         _disks = await FileSystemService.GetDisksAsync();
     }
 
-    public async void InsertDisk()
+    private void DeleteDisk(ObjectId id)
+    {
+        FileSystemService.Delete(id, FileSystemService.ParentType.Disk);
+    }
+
+    private async void InsertDisk()
     {
         var newDisk = new Disk()
         {
@@ -75,9 +81,9 @@ else
         await FileSystemService.InsertDiskAsync(newDisk);
         _disks = await FileSystemService.GetDisksAsync();
     }
-    void MethodToTriggerUrl(string disk)
+    void ViewDisk(string diskId)
     {
-        NavigationManager.NavigateTo($"fs/{disk}");
+        NavigationManager.NavigateTo($"fs/disk/{diskId}");
     }
 
 }

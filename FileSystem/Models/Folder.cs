@@ -14,5 +14,6 @@ namespace FileSystem.Models
         public ObjectId Parent { get; set; }
         public List<ObjectId> Subfolders;
         public List<ObjectId> Files;
+        public bool IsParentFolder;
     }
 }

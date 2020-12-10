@@ -10,5 +10,6 @@ namespace FileSystem.Models
         public DateTime LastEdit { get; set; }
         public ObjectId Parent { get; set; }
         public string Content { get; set; }
+        public bool IsParentFolder;
     }
 }

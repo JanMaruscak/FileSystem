@@ -78,19 +78,26 @@ namespace FileSystem.Data
             }
         }
 
-        public Disk GetDiskByLocation(string location)
+        public Disk GetDiskById(ObjectId id)
         {
             var disks = _db.GetCollection<Disk>("disk");
-            var diskId = GetIdByLocation(location, ParentType.Disk);
-            var disk = disks.Find(t => t.Id == diskId).First();
+            // var diskId = GetIdByLocation(location, ParentType.Disk);
+            var disk = disks.Find(t => t.Id == id).First();
             return disk;
         }
-        public Folder GetFolderByLocation(string location)
+        public Folder GetFolderById(ObjectId id)
         {
             var folders = _db.GetCollection<Folder>("folder");
-            var folderId = GetIdByLocation(location, ParentType.Folder);
-            var folder = folders.Find(t => t.Id == folderId).First();
+            // var folderId = GetIdByLocation(location, ParentType.Folder);
+            var folder = folders.Find(t => t.Id == id).First();
             return folder;
+        }
+        public File GetFileById(ObjectId id)
+        {
+            var files = _db.GetCollection<File>("file");
+            // var fileId = GetIdByLocation(location, ParentType.File);
+            var file = files.Find(t => t.Id == id).First();
+            return file;
         }
 
         private void AddFileToDiskList(ObjectId diskId, ObjectId fileId)
@@ -111,7 +118,59 @@ namespace FileSystem.Data
          
             disks.UpdateOneAsync(filter, update);
         }
-        private ObjectId GetIdByLocation(string location,ParentType parentType)
+
+        public async void SaveFileContent(ObjectId id, string content)
+        {
+            var files = _db.GetCollection<File>("file");
+
+            var filter = Builders<File>.Filter.Where(t => t.Id == id);
+            var update = Builders<File>.Update.Set(t => t.Content, content);
+         
+            await files.UpdateOneAsync(filter, update);
+        }
+
+        // TODO Update Parent size
+        private void UpdateParentSize(ObjectId parentId,ObjectId fileId, ulong size, ParentType parentType)
+        {
+            switch (parentType)
+            {
+                case ParentType.Disk:
+                    UpdateSize(parentId, size, parentType);
+                    break;
+                case ParentType.Folder:
+                    UpdateSize(parentId, size, ParentType.Folder);
+                    var folder = GetFolderById(parentId);
+                    // TODO
+                    /*if (folder.IsParentFolder)
+                    {
+                        UpdateSize();
+                    }*/
+                    
+                    break;
+            }
+        }
+
+        private void UpdateSize(ObjectId id, ulong size, ParentType parentType)
+        {
+            switch (parentType)
+            {
+                case ParentType.Disk:
+                    var disks = _db.GetCollection<Disk>("disk");
+                    var filter = Builders<Disk>.Filter.Where(t => t.Id == id);
+                    var update = Builders<Disk>.Update.Set(t => t.TotalSize, size);
+                    disks.UpdateOne(filter, update);
+                    break;
+                case ParentType.File:
+                    throw new NotImplementedException();
+                case ParentType.Folder:
+                    var folders = _db.GetCollection<Folder>("folder");
+                    var folderFilter = Builders<Folder>.Filter.Where(t => t.Id == id);
+                    var folderUpdate = Builders<Folder>.Update.Set(t => t.TotalSize, size);
+                    folders.UpdateOne(folderFilter, folderUpdate);
+                    break;
+            }
+        }
+        private ObjectId GetIdByURL(string location,ParentType parentType)
         {
             switch (parentType)
             {
@@ -125,6 +184,11 @@ namespace FileSystem.Data
                     var disks = _db.GetCollection<Disk>("disk");
                     var disk = disks.Find(t => t.Name == location).First();
                     return disk.Id;
+                case ParentType.File:
+                    split = location.Split('/');
+                    var files = _db.GetCollection<File>("file");
+                    var file = files.Find(t => t.Name == split.Last()).First();
+                    return file.Id;
             }
             //TODO Don't return ObjectId.Empty
             return ObjectId.Empty;
@@ -132,7 +196,50 @@ namespace FileSystem.Data
 
         public enum ParentType
         {
-            Folder,Disk
+            Folder,Disk,File
+        }
+
+        public void Delete(ObjectId id, ParentType parentType)
+        {
+            switch (parentType)
+            {
+                case ParentType.Disk:
+                    var disks = _db.GetCollection<Disk>("disk");
+                    var disk = disks.Find(t => t.Id == id).First();
+                    foreach (var file in disk.Files)
+                    {
+                        Delete(file,ParentType.File);
+                    }
+
+                    foreach (var folder in disk.Folders)
+                    {
+                        
+                        Delete(folder,ParentType.Folder);
+                    }
+                    var filter = Builders<Disk>.Filter.Where(t => t.Id == id);
+                    disks.DeleteOne(filter);
+                    break;
+                case ParentType.File:
+                    var files = _db.GetCollection<File>("file");
+                    var fileFilter = Builders<File>.Filter.Where(t => t.Id == id);
+                    files.DeleteOne(fileFilter);
+                    break;
+                case ParentType.Folder:
+                    var folders = _db.GetCollection<Folder>("folder");
+                    var parent = folders.Find(t => t.Id == id).First();
+                    foreach (var file in parent.Files)
+                    {
+                        Delete(file,ParentType.File);
+                    }
+
+                    foreach (var folder in parent.Subfolders)
+                    {
+                        Delete(folder,ParentType.Folder);
+                    }
+                    var folderFilter = Builders<Folder>.Filter.Where(t => t.Id == id);
+                    folders.DeleteOne(folderFilter);
+                    break;
+            }
         }
     }
 }

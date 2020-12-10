@@ -33,6 +33,7 @@
           <e p="Error.cshtml" t="Include" />
           <e p="Error.cshtml.cs" t="Include" />
           <e p="FetchData.razor" t="Include" />
+          <e p="FileView.razor" t="Include" />
           <e p="FolderView.razor" t="Include" />
           <e p="Index.razor" t="Include" />
         </e>

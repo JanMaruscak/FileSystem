@@ -1,4 +1,4 @@
-﻿@page "/fs/{Location?}"
+﻿@page "/fs/disk/{Location?}"
 
 @using FileSystem.Models
 @using FileSystem.Data
@@ -28,19 +28,21 @@ else
         @foreach (var file in _files)
         {
             <tr>
-                <td>File</td>
+                <td @onclick="@(e => ViewFile(file.Id.ToString()))">File</td>
                 <td>@file.Name</td>
                 <td>@file.Created</td>
                 <td>@file.LastEdit</td>
+                <td @onclick="@(e => DeleteFile(file.Id))">Delete</td>
             </tr>
         }
         @foreach (var folder in _folders)
                 {
                     <tr>
-                        <td @onclick="@(e => MethodToTriggerUrl(folder.Name))">Folder</td>
+                        <td @onclick="@(e => ViewFolder(folder.Id.ToString()))">Folder</td>
                         <td>@folder.Name</td>
                         <td>@folder.Created</td>
                         <td>@folder.LastEdit</td>
+                        <td @onclick="@(e => DeleteFolder(folder.Id))">Delete</td>
                     </tr>
                 }
         </tbody>
@@ -76,7 +78,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _current = FileSystemService.GetDiskByLocation(Location);
+        _current = FileSystemService.GetDiskById(new ObjectId(Location));
         _files = await FileSystemService.GetFilesAsync(_current.Id, FileSystemService.ParentType.Disk);
         _folders = await FileSystemService.GetFoldersAsync(_current.Id,FileSystemService.ParentType.Disk);
     }
@@ -90,7 +92,8 @@ else
             Id =  ObjectId.GenerateNewId(),
             LastEdit = DateTime.Now,
             Name = _newFileName,
-            Parent = FileSystemService.GetDiskByLocation(Location).Id
+            Parent = FileSystemService.GetDiskById(new ObjectId(Location)).Id,
+            IsParentFolder = false
         };
         await FileSystemService.InsertFileAsync(newFile);
         _files.Add(newFile);
@@ -105,18 +108,32 @@ else
             Id =  ObjectId.GenerateNewId(),
             LastEdit = DateTime.Now,
             Name = _newFolderName,
-            Parent = FileSystemService.GetDiskByLocation(Location).Id,
+            Parent = FileSystemService.GetDiskById(new ObjectId(Location)).Id,
             Files = new List<ObjectId>(),
             Subfolders = new List<ObjectId>(),
-            TotalSize = 0
+            TotalSize = 0,
+            IsParentFolder = false
         };
         await FileSystemService.InsertFolderAsync(newFolder);
         _folders.Add(newFolder);
         StateHasChanged();
     }
-    void MethodToTriggerUrl(string folder)
+
+    private void DeleteFolder(ObjectId id)
     {
-        NavigationManager.NavigateTo($"fs/{_current.Name}/{folder}");
+        FileSystemService.Delete(id, FileSystemService.ParentType.Folder);
+    }
+    private void DeleteFile(ObjectId id)
+    {
+        FileSystemService.Delete(id, FileSystemService.ParentType.File);
+    }
+    void ViewFolder(string folderId)
+    {
+        NavigationManager.NavigateTo($"fs/folder/{folderId}");
+    }
+    void ViewFile(string fileId)
+    {
+        NavigationManager.NavigateTo($"fs/file/{fileId}");
     }
 
 }}

@@ -1,0 +1,60 @@
+﻿@page "/fs/file/{Location?}"
+
+@using FileSystem.Models
+@using FileSystem.Data
+@using MongoDB.Bson
+@inject NavigationManager NavigationManager
+@inject FileSystemService FileSystemService
+
+<h3>@Disk://@Location</h3>
+@if (_current == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <h1>@_current.Name</h1>
+    <textarea @oninput="HandleOnChange">@data</textarea>
+    <button @onclick="SaveContent">Save</button>
+
+@code {
+    [Parameter]
+    public string Location { get; set; }
+[Parameter]
+    public string Disk { get; set; }
+
+    private File _current;
+    
+    private string data;
+
+    [Parameter]
+    public EventCallback<string> ChildDataChanged { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _current = FileSystemService.GetFileById(new ObjectId(Location));
+    }
+    private async Task HandleOnChange(ChangeEventArgs args)
+    {
+        data = args.Value.ToString();
+
+        await ChildDataChanged.InvokeAsync(data);
+    }
+    protected override void OnParametersSet()
+    {
+        data = _current.Content;
+
+        base.OnParametersSet();
+    }
+
+    private void SaveContent()
+    {
+        FileSystemService.SaveFileContent(_current.Id,data);
+    }
+    void MethodToTriggerUrl(string folder)
+    {
+        NavigationManager.NavigateTo($"fs/{Disk}/{Location}/{folder}");
+    }
+}}
