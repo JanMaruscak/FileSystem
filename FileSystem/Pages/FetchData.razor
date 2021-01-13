@@ -63,7 +63,9 @@ else
 
     private void DeleteDisk(ObjectId id)
     {
+        _disks.RemoveAll(x => x.Id == id);
         FileSystemService.Delete(id, FileSystemService.ParentType.Disk);
+        StateHasChanged();
     }
 
     private async void InsertDisk()
@@ -80,10 +82,12 @@ else
         };
         await FileSystemService.InsertDiskAsync(newDisk);
         _disks = await FileSystemService.GetDisksAsync();
+        StateHasChanged();
     }
     void ViewDisk(string diskId)
     {
         NavigationManager.NavigateTo($"fs/disk/{diskId}");
     }
+
 
 }

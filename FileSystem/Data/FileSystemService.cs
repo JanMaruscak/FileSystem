@@ -24,15 +24,14 @@ namespace FileSystem.Data
         public async Task InsertFileAsync(File file)
         {
             var collection = _db.GetCollection<File>("file");
-            AddFileToDiskList(file.Parent,file.Id);
+            //AddFileToDiskList(file.Parent,file.Id);
             await collection.InsertOneAsync(file);
         }
         public async Task InsertFolderAsync(Folder folder)
         {
             var collection = _db.GetCollection<Folder>("folder");
-            AddFolderToDiskList(folder.Parent,folder.Id);
+           // AddFolderToDiskList(folder.Parent,folder.Id);
             await collection.InsertOneAsync(folder);
-            await Task.FromResult(0);
         }
 
         public async Task<List<Disk>> GetDisksAsync()
@@ -100,7 +99,7 @@ namespace FileSystem.Data
             return file;
         }
 
-        private void AddFileToDiskList(ObjectId diskId, ObjectId fileId)
+        public void AddFileToDiskList(ObjectId diskId, ObjectId fileId)
         {
             var disks = _db.GetCollection<Disk>("disk");
 
@@ -109,7 +108,16 @@ namespace FileSystem.Data
          
             disks.UpdateOneAsync(filter, update);
         }
-        private void AddFolderToDiskList(ObjectId diskId, ObjectId folderId)
+        public void AddFileToFolderList(ObjectId parentId, ObjectId fileId)
+        {
+            var folders = _db.GetCollection<Folder>("folder");
+
+            var filter = Builders<Folder>.Filter.Where(t => t.Id == parentId);
+            var update = Builders<Folder>.Update.Push(t => t.Files, fileId);
+         
+            folders.UpdateOneAsync(filter, update);
+        }
+        public void AddFolderToDiskList(ObjectId diskId, ObjectId folderId)
         {
             var disks = _db.GetCollection<Disk>("disk");
 
@@ -119,6 +127,16 @@ namespace FileSystem.Data
             disks.UpdateOneAsync(filter, update);
         }
 
+        public void AddFolderToFolderList(ObjectId parentId, ObjectId folderId)
+        {
+            var folders = _db.GetCollection<Folder>("folder");
+
+            var filter = Builders<Folder>.Filter.Where(t => t.Id == parentId);
+            var update = Builders<Folder>.Update.Push(t => t.Subfolders, folderId);
+         
+            folders.UpdateOneAsync(filter, update);
+        }
+        
         public async void SaveFileContent(ObjectId id, string content)
         {
             var files = _db.GetCollection<File>("file");

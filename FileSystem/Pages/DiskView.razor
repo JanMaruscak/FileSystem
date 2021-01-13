@@ -7,6 +7,7 @@
 @inject FileSystemService FileSystemService
 
 <h3>@Location://</h3>
+<button @onclick="GoBack">Go back</button>
 @if (_files == null)
 {
     <p>
@@ -95,6 +96,7 @@ else
             Parent = FileSystemService.GetDiskById(new ObjectId(Location)).Id,
             IsParentFolder = false
         };
+        FileSystemService.AddFileToDiskList(new ObjectId(Location), newFile.Id);
         await FileSystemService.InsertFileAsync(newFile);
         _files.Add(newFile);
         StateHasChanged();
@@ -114,6 +116,7 @@ else
             TotalSize = 0,
             IsParentFolder = false
         };
+        FileSystemService.AddFolderToDiskList(new ObjectId(Location), newFolder.Id);
         await FileSystemService.InsertFolderAsync(newFolder);
         _folders.Add(newFolder);
         StateHasChanged();
@@ -134,6 +137,11 @@ else
     void ViewFile(string fileId)
     {
         NavigationManager.NavigateTo($"fs/file/{fileId}");
+    }
+    
+    void GoBack()
+    {
+        NavigationManager.NavigateTo($"fs");
     }
 
 }}

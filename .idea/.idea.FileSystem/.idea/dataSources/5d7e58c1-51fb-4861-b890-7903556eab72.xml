@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="@localhost">
+  <database-model serializer="dbm" dbms="MONGO" family-id="MONGO" format-version="4.19">
+    <root id="1">
+      <ServerVersion>4.4.2</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="FileSystem"/>
+    <schema id="3" parent="1" name="admin"/>
+    <schema id="4" parent="1" name="config"/>
+    <schema id="5" parent="1" name="local"/>
+    <table id="6" parent="2" name="disk"/>
+    <table id="7" parent="2" name="file"/>
+    <table id="8" parent="2" name="folder"/>
+    <column id="9" parent="6" name="_id">
+      <DataType>ObjectId(0)|12s</DataType>
+    </column>
+    <column id="10" parent="6" name="Files">
+      <DataType>list(0)|4999545s</DataType>
+    </column>
+    <column id="11" parent="6" name="LastEdit">
+      <DataType>Date(0)|91s</DataType>
+    </column>
+    <column id="12" parent="6" name="Name">
+      <DataType>String(0)|12s</DataType>
+    </column>
+    <column id="13" parent="6" name="TotalSize">
+      <DataType>Long(0)|12s</DataType>
+    </column>
+    <column id="14" parent="6" name="Folders">
+      <Position>1</Position>
+      <DataType>list(0)|4999545s</DataType>
+    </column>
+    <column id="15" parent="6" name="Created">
+      <Position>1</Position>
+      <DataType>Date(0)|91s</DataType>
+    </column>
+    <column id="16" parent="8" name="_id">
+      <DataType>ObjectId(0)|12s</DataType>
+    </column>
+    <column id="17" parent="8" name="Created">
+      <DataType>Date(0)|91s</DataType>
+    </column>
+    <column id="18" parent="8" name="Files">
+      <DataType>list(0)|4999545s</DataType>
+    </column>
+    <column id="19" parent="8" name="IsParentFolder">
+      <DataType>Boolean|12s</DataType>
+    </column>
+    <column id="20" parent="8" name="LastEdit">
+      <DataType>Date(0)|91s</DataType>
+    </column>
+    <column id="21" parent="8" name="Name">
+      <DataType>String(0)|12s</DataType>
+    </column>
+    <column id="22" parent="8" name="TotalSize">
+      <DataType>Long(0)|12s</DataType>
+    </column>
+    <column id="23" parent="8" name="Parent">
+      <Position>1</Position>
+      <DataType>ObjectId(0)|12s</DataType>
+    </column>
+    <column id="24" parent="8" name="Subfolders">
+      <Position>2</Position>
+      <DataType>list(0)|4999545s</DataType>
+    </column>
+  </database-model>
+</dataSource>
