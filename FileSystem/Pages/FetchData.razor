@@ -23,6 +23,7 @@ else
     <table class="table">
         <thead>
         <tr>
+            <th>Type</th>
             <th>Name</th>
             <th>Size</th>
             <th>Created</th>
@@ -33,11 +34,12 @@ else
         @foreach (var disk in _disks)
         {
             <tr>
-                <td @onclick="@(e => ViewDisk(disk.Id.ToString()))">@disk.Name</td>
+                <td @onclick="@(e => ViewDisk(disk.Id.ToString()))" style="cursor: pointer">Open disk</td>
+                <td>@disk.Name</td>
                 <td>@disk.TotalSize</td>
                 <td>@disk.Created</td>
                 <td>@disk.LastEdit</td>
-                <td @onclick="@(e => DeleteDisk(disk.Id))">Delete</td>
+                <td @onclick="@(e => DeleteDisk(disk.Id))" style="cursor: pointer">Delete</td>
             </tr>
         }
         </tbody>

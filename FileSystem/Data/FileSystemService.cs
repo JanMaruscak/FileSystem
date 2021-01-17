@@ -13,7 +13,7 @@ namespace FileSystem.Data
         private readonly IMongoDatabase _db;
         public FileSystemService()
         {
-            var client = new MongoClient();
+            var client = new MongoClient("mongodb+srv://bonpar:bonpar@filesystem.fo2fa.mongodb.net/test");
             _db = client.GetDatabase("FileSystem");
         }
         public async Task InsertDiskAsync(Disk disk)

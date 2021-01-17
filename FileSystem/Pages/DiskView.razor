@@ -35,7 +35,7 @@ else
                 <td>@file.Size</td>
                 <td>@file.Created</td>
                 <td>@file.LastEdit</td>
-                <td @onclick="@(e => DeleteFile(file.Id))">Delete</td>
+                <td @onclick="@(e => DeleteFile(file.Id))" style="cursor: pointer">Delete</td>
             </tr>
         }
         @foreach (var folder in _folders)
@@ -46,7 +46,7 @@ else
                         <td>@folder.TotalSize</td>
                         <td>@folder.Created</td>
                         <td>@folder.LastEdit</td>
-                        <td @onclick="@(e => DeleteFolder(folder.Id))">Delete</td>
+                        <td @onclick="@(e => DeleteFolder(folder.Id))" style="cursor: pointer" >Delete</td>
                     </tr>
                 }
         </tbody>
