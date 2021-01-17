@@ -37,7 +37,6 @@
           <e p="FetchData.razor" t="Include" />
           <e p="FileView.razor" t="Include" />
           <e p="FolderView.razor" t="Include" />
-          <e p="Index.razor" t="Include" />
         </e>
         <e p="Program.cs" t="Include" />
         <e p="Properties" t="Include">

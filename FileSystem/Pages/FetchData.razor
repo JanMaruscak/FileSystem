@@ -1,4 +1,4 @@
-﻿@page "/fs"
+﻿@page "/"
 
 @using FileSystem.Data
 @using FileSystem.Models
@@ -8,9 +8,6 @@
 @inject NavigationManager NavigationManager
 
 <h1>Disks</h1>
-
-<p>@Location</p>
-
 
 @if (_disks == null)
 {
@@ -88,7 +85,7 @@ else
     }
     void ViewDisk(string diskId)
     {
-        NavigationManager.NavigateTo($"fs/disk/{diskId}");
+        NavigationManager.NavigateTo($"/disk/{diskId}");
     }
 
 

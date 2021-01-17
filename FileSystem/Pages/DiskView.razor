@@ -1,4 +1,4 @@
-﻿@page "/fs/disk/{Location?}"
+﻿@page "/disk/{Location?}"
 
 @using FileSystem.Models
 @using FileSystem.Data
@@ -6,7 +6,10 @@
 @inject NavigationManager NavigationManager
 @inject FileSystemService FileSystemService
 
-<h3>@Location://</h3>
+@if (_current != null)
+{
+    <h3>@_current.Name</h3>
+}
 <button @onclick="GoBack">Go back</button>
 @if (_files == null)
 {
@@ -135,16 +138,16 @@ else
     }
     void ViewFolder(string folderId)
     {
-        NavigationManager.NavigateTo($"fs/folder/{folderId}");
+        NavigationManager.NavigateTo($"folder/{folderId}");
     }
     void ViewFile(string fileId)
     {
-        NavigationManager.NavigateTo($"fs/file/{fileId}");
+        NavigationManager.NavigateTo($"file/{fileId}");
     }
     
     void GoBack()
     {
-        NavigationManager.NavigateTo($"fs");
+        NavigationManager.NavigateTo($"/");
     }
 
 }}
