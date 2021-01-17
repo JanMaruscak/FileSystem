@@ -21,6 +21,7 @@ else
         <tr>
             <th>Type</th>
             <th>Name</th>
+            <th>Size</th>
             <th>Created</th>
             <th>Last Edit</th>
         </tr>
@@ -29,8 +30,9 @@ else
         @foreach (var file in _files)
         {
             <tr>
-                <td @onclick="@(e => ViewFile(file.Id.ToString()))">File</td>
+                <td @onclick="@(e => ViewFile(file.Id.ToString()))" style="cursor: pointer">Open file</td>
                 <td>@file.Name</td>
+                <td>@file.Size</td>
                 <td>@file.Created</td>
                 <td>@file.LastEdit</td>
                 <td @onclick="@(e => DeleteFile(file.Id))">Delete</td>
@@ -39,8 +41,9 @@ else
         @foreach (var folder in _folders)
                 {
                     <tr>
-                        <td @onclick="@(e => ViewFolder(folder.Id.ToString()))">Folder</td>
+                        <td @onclick="@(e => ViewFolder(folder.Id.ToString()))" style="cursor: pointer">Open folder</td>
                         <td>@folder.Name</td>
+                        <td>@folder.TotalSize</td>
                         <td>@folder.Created</td>
                         <td>@folder.LastEdit</td>
                         <td @onclick="@(e => DeleteFolder(folder.Id))">Delete</td>

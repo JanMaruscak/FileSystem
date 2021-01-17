@@ -145,6 +145,19 @@ namespace FileSystem.Data
             var update = Builders<File>.Update.Set(t => t.Content, content);
          
             await files.UpdateOneAsync(filter, update);
+
+            var sizeUpdate = Builders<File>.Update.Set(t => t.Size, (ulong)System.Text.Encoding.Unicode.GetByteCount(content));
+            await files.UpdateOneAsync(filter, sizeUpdate);
+            
+            var file = GetFileById(id);
+            if (file.IsParentFolder)
+            {
+                CalculateChildrenSize(file.Parent, ParentType.Folder);
+            }
+            else
+            {
+                CalculateChildrenSize(file.Parent, ParentType.Disk);
+            }
         }
 
         // TODO Update Parent size
@@ -168,6 +181,52 @@ namespace FileSystem.Data
             }
         }
 
+        private void CalculateChildrenSize(ObjectId parentId, ParentType parentType)
+        {
+            switch (parentType)
+            {
+                case ParentType.Disk:
+                    var disk = GetDiskById(parentId);
+                    ulong newSize = 0;
+                    foreach (var file in disk.Files)
+                    {
+                        var fileObj = GetFileById(file);
+                        newSize += fileObj.Size;
+                    }
+                    foreach (var folderId in disk.Folders)
+                    {
+                        var folderObj = GetFolderById(folderId);
+                        newSize += folderObj.TotalSize;
+                    }
+                    UpdateSize(parentId,newSize, ParentType.Disk);
+                    break;
+                case ParentType.Folder:
+                    var folder = GetFolderById(parentId);
+                    newSize = 0;
+                    foreach (var file in folder.Files)
+                    {
+                        var fileObj = GetFileById(file);
+                        newSize += fileObj.Size;
+                    }
+                    foreach (var folderId in folder.Subfolders)
+                    {
+                        var folderObj = GetFolderById(folderId);
+                        newSize += folderObj.TotalSize;
+                    }
+                    UpdateSize(parentId,newSize, ParentType.Folder);
+                    if (folder.IsParentFolder)
+                    {
+                        CalculateChildrenSize(folder.Parent,ParentType.Folder);
+                    }
+                    else
+                    {
+                        
+                        CalculateChildrenSize(folder.Parent,ParentType.Disk);
+                    }
+                    break;
+            }
+        }
+
         private void UpdateSize(ObjectId id, ulong size, ParentType parentType)
         {
             switch (parentType)
@@ -179,7 +238,11 @@ namespace FileSystem.Data
                     disks.UpdateOne(filter, update);
                     break;
                 case ParentType.File:
-                    throw new NotImplementedException();
+                    var files = _db.GetCollection<File>("file");
+                    var fileFilter = Builders<File>.Filter.Where(t => t.Id == id);
+                    var fileUpdate = Builders<File>.Update.Set(t => t.Size, size);
+                    files.UpdateOne(fileFilter, fileUpdate);
+                    break;
                 case ParentType.Folder:
                     var folders = _db.GetCollection<Folder>("folder");
                     var folderFilter = Builders<Folder>.Filter.Where(t => t.Id == id);

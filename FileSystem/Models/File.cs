@@ -10,6 +10,7 @@ namespace FileSystem.Models
         public DateTime LastEdit { get; set; }
         public ObjectId Parent { get; set; }
         public string Content { get; set; }
+        public ulong Size { get; set; }
         public bool IsParentFolder;
     }
 }
